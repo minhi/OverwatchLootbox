@@ -1,0 +1,16 @@
+{
+  "name": "overwatchlootbox",
+  "version": "1.0.0",
+  "description": "Eine Webseite, mit denen User mit einem Button einen Mausclick auf meinem System machen können. Damit dürfen Lootboxen per remote geöffnet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Duy Minh Vo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8"
+  }
+}

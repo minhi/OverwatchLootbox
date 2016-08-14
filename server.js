@@ -5,4 +5,4 @@ http.createServer(function(request, response) {
 	response.writeHead(200);
 	response.write("minh");
 	response.end();
-}).listen(13439, "0.0.0.0");
+}).listen(13439, "0.0.0.0");//

@@ -1,0 +1,41 @@
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(241, 247, 248);
+    font-family: "Open Sans", sans-serif;
+    color: rgb(73, 91, 144);
+}
+
+.user-container {
+    /* size */
+    width: 100%;
+    padding: 30px 200px 30px 200px;
+    /* flex */
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /* border */
+    border-bottom: 4px dotted rgb(73, 91, 144);
+    /* Transisiton */
+    transition: all 1s;
+    
+}
+
+.user-item {
+    
+    width: 200px;
+    margin: 10px;
+    text-align: center;
+}
+
+.user-item .username {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+}
+
+.user-item .score {
+    font-size: 1em;
+}

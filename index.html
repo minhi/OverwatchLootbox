@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link href="css/style.css" rel="stylesheet">
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    </head>
+    <body>
+
+        <div id="user-container" class="user-container">
+            <!-- Hier kommen die User per JS rein -->
+        </div>
+
+        <span id="i"></span>
+        <input id="input" type="text" name="input" value="username" />
+        <button id="btn">button</button>
+        <script>
+            ////// VARIABLEN /////
+            var myUsername = "";
+            var myId = -1;
+
+            ////// CONTROLLER /////
+            $("#btn").click(function() {
+                 var input = $("#input").val();
+                 socket.emit("add", input);
+            });
+
+            ////// SOCKET.IO //////
+            var socket = io();
+            socket.emit("msg", "jo");
+
+            // Beim connecten schonmal die User im Raum laden
+            socket.on("build", function(msg) {
+                // Beachte, dass wir eine Liste aus Usern haben als msg
+                for (i = 0; i < msg.length; ++i) {
+                    addNewUser(msg[i].id, msg[i].username);
+                }
+            });
+
+            // Neuer User hat sich eingeloggt
+            // msg: {username, id, socketid}
+            socket.on("add", function(msg) {
+                addNewUser(msg.id, msg.username);
+            });
+
+            // Entferne einen User
+            socket.on("remove", function(msg) {
+                removeUserById(msg.id);
+            });
+
+            socket.on("msg", function(msg) {
+                $("#i").append(msg);
+            });
+
+            ////// HILFSFUNKTIONEN //////
+            // Fügt einen neuen User hinzu (auf View-Ebene)
+            function addNewUser(id, username) {
+                var $new = $("<div/>", {id: "user-" + id, class: "user-item"});
+                $("<div/>", {class: "username", text: username}).appendTo($new);
+                $("<div/>", {class: "score", text: 0}).appendTo($new);
+                $("#user-container").append($new);
+            }
+
+            // Entfernt einen User (auf View-Ebene)
+            function removeUserById(id) {
+                $("#user-" + id).remove();
+            }
+
+        </script>
+    </body>
+</html>

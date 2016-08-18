@@ -19,9 +19,10 @@
         <span id="i"></span>
         <input id="input" type="text" name="input" value="username" />
         <button id="btn">button</button>
-        <button id="click">button</button>
+        <button id="click" class="clickbtn">button</button>
         <script>
             ////// VARIABLEN /////
+            var socket = io();
             var myUsername = "";
             var myId = -1;
 
@@ -33,9 +34,24 @@
                  socket.emit("add", input);
             });
 
-            ////// SOCKET.IO //////
-            var socket = io();
-            socket.emit("msg", "jo");
+            // Buttonaktionen
+            $("#click").mousedown(function() {
+                $("#i").text("down ");
+                socket.emit("down", myId);
+                $("#click").mouseleave(function() {
+                    $("#i").text("up ");
+                    $("#click").off("mouseleave");
+                    socket.emit("up", myId);
+                });
+            });
+
+            $("#click").mouseup(function() {
+                $("#i").text("up ");
+                socket.emit("up", myId);
+            });
+            
+            ////// SOCKET.IO LISTENER //////
+            
 
             // Beim connecten schonmal die User im Raum laden
             socket.on("build", function(msg) {
@@ -64,8 +80,13 @@
                 removeUserById(msg.id);
             });
 
-            socket.on("msg", function(msg) {
-                $("#i").append(msg);
+            // Buttonverhalten
+            socket.on("down", function(msg) {
+                $("#click").addClass("down");
+            });
+
+            socket.on("up", function(msg) {
+                $("#click").removeClass("down");
             });
 
             ////// HILFSFUNKTIONEN //////
@@ -82,6 +103,7 @@
             // Entfernt einen User (auf View-Ebene)
             function removeUserById(id) {
                 $user = $("#user-" + id);
+                // Animation abspielen und danach Element entfernen
                 $user.velocity("fadeOut", {duration: 300, easing: "easeInOutSine", complete: function(elements) {
                     $("#user-" + id).remove();
                 }});

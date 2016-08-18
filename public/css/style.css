@@ -7,10 +7,7 @@ body {
     color: rgb(73, 91, 144);
 }
 
-.visible {
-    opacity: 1;
-}
-
+/* USER */
 .user-container {
     /* size */
     width: 100%;
@@ -22,7 +19,7 @@ body {
     align-items: center;
     flex-wrap: wrap;
     /* border */
-    border-bottom: 4px dotted rgb(73, 91, 144);
+    border-bottom: 3px dotted rgb(73, 91, 144);
     
 }
 
@@ -34,10 +31,29 @@ body {
 }
 
 .user-item .username {
-    font-size: 1.5em;
+    font-size: 2em;
     margin-bottom: 5px;
+    font-weight: 100;
 }
 
 .user-item .score {
     font-size: 1em;
+}
+
+/* CLICKBUTTON */
+
+button.clickbtn {
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.5em;
+    background-color: lightcoral;
+}
+
+.clickbtn.down {
+    background-color: yellow;
+}
+
+.clickbtn.up {
+    background-color: red;
 }

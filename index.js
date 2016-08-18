@@ -39,9 +39,6 @@ io.on("connection", function(socket) {
 	socket.emit("build", users);
 
 	console.log("a user " + socket.id + " connected.");
-	socket.on("msg", function(msg) {
-		io.emit("msg", msg);
-	});
 
 	// Neuer User hat sich eingeloggt
 	// msg: der Username vom User
@@ -60,16 +57,37 @@ io.on("connection", function(socket) {
 
 	// Ein User ist nicht mehr verbunden
 	socket.on("disconnect", function(){
-		var index = 0;
-		// Suche den User, der entfernt werden soll.
-		while (index < users.length && users[index].socketid !== socket.id) {
-			++index;
-		}
-		if (index < users.length) {
+		var index = getUserIndex(socket.id);
+		if (index != -1) {
 			socket.broadcast.emit("remove", users[index]); // Den anderen Usern davon erzählen
 			users.splice(index, 1); // Entfernt den User aus der Liste
 		}
 		console.log("a user " + socket.id + " disconnected.");
 	});
 
+	socket.on("down", function(){
+		console.log("down");
+		io.emit("down");
+	});
+
+	socket.on("up", function(){
+		io.emit("up");
+	});
+
+	// HILFSFUNKTIONEN
+
+	// Gibt den Index des (angemeldeten) Users zurück, dessen Socket ID diesem entspricht
+	// Gibt -1 zurück, falls kein User mit der ID gefunden wurde
+	function getUserIndex(socketId) {
+		var index = 0;
+		// Suche den User, der entfernt werden soll.
+		while (index < users.length && users[index].socketid !== socketId) {
+			++index;
+		}
+		if (index >= users.length) {
+			return -1;
+		} else {
+			return index;
+		}
+	}
 });

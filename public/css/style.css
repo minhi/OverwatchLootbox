@@ -7,6 +7,10 @@ body {
     color: rgb(73, 91, 144);
 }
 
+.visible {
+    opacity: 1;
+}
+
 .user-container {
     /* size */
     width: 100%;
@@ -19,16 +23,14 @@ body {
     flex-wrap: wrap;
     /* border */
     border-bottom: 4px dotted rgb(73, 91, 144);
-    /* Transisiton */
-    transition: all 1s;
     
 }
 
 .user-item {
-    
     width: 200px;
     margin: 10px;
     text-align: center;
+    display: none;
 }
 
 .user-item .username {

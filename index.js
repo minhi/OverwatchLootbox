@@ -54,7 +54,8 @@ io.on("connection", function(socket) {
 		};
 		++userId;
 		users.push(newUser);
-		io.emit("add", newUser);
+		socket.broadcast.emit("add", newUser);
+		socket.emit("bind", newUser); // Einzeln zum Urpsrung senden, damit er die ID speichern kann
 	});
 
 	// Ein User ist nicht mehr verbunden

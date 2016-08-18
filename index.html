@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Test</title>
+        <title>Lootbox opening</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link href="css/style.css" rel="stylesheet">
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     </head>
     <body>
 
@@ -18,12 +19,15 @@
         <span id="i"></span>
         <input id="input" type="text" name="input" value="username" />
         <button id="btn">button</button>
+        <button id="click">button</button>
         <script>
             ////// VARIABLEN /////
             var myUsername = "";
             var myId = -1;
 
             ////// CONTROLLER /////
+
+            // Anmeldung
             $("#btn").click(function() {
                  var input = $("#input").val();
                  socket.emit("add", input);
@@ -47,6 +51,14 @@
                 addNewUser(msg.id, msg.username);
             });
 
+            // Das gleiche wie add, bloß dass id und username gespeichert werden
+            // Nach dem Anmelden, die ID und Username speichern
+            socket.on("bind", function(msg) {
+                addNewUser(msg.id, msg.username);
+                myId = msg.id;
+                myUsername = msg.username;
+            });
+
             // Entferne einen User
             socket.on("remove", function(msg) {
                 removeUserById(msg.id);
@@ -57,17 +69,22 @@
             });
 
             ////// HILFSFUNKTIONEN //////
+
             // Fügt einen neuen User hinzu (auf View-Ebene)
             function addNewUser(id, username) {
                 var $new = $("<div/>", {id: "user-" + id, class: "user-item"});
                 $("<div/>", {class: "username", text: username}).appendTo($new);
                 $("<div/>", {class: "score", text: 0}).appendTo($new);
                 $("#user-container").append($new);
+                $("#user-" + id).velocity("fadeIn", {duration: 300, easing: "easeInOutSine"});
             }
 
             // Entfernt einen User (auf View-Ebene)
             function removeUserById(id) {
-                $("#user-" + id).remove();
+                $user = $("#user-" + id);
+                $user.velocity("fadeOut", {duration: 300, easing: "easeInOutSine", complete: function(elements) {
+                    $("#user-" + id).remove();
+                }});
             }
 
         </script>

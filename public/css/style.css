@@ -1,3 +1,7 @@
+html {
+    height: 100%;
+}
+
 body {
     height: 100%;
     margin: 0;
@@ -5,6 +9,14 @@ body {
     background-color: rgb(241, 247, 248);
     font-family: "Open Sans", sans-serif;
     color: rgb(73, 91, 144);
+}
+
+main {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 1;
 }
 
 /* USER */
@@ -42,18 +54,39 @@ body {
 
 /* CLICKBUTTON */
 
+.clickbtn-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
 button.clickbtn {
     border: none;
     text-align: center;
     text-decoration: none;
+    font-family: "Open Sans", sans-serif;
     font-size: 1.5em;
-    background-color: lightcoral;
+    background-color: rgb(73, 91, 144);
+    color: rgb(241, 247, 248);
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 6px solid cornflowerblue;
+    transition: all 0.07s ease-in-out;
 }
 
 .clickbtn.down {
-    background-color: yellow;
+    transform: scale(0.95) rotate(180deg);
+    border-color: darkorange;
+    background-color: rgb(53, 71, 124)
 }
 
 .clickbtn.up {
     background-color: red;
+}
+
+.clickbtn:focus {
+    outline: 0;
 }

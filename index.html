@@ -9,25 +9,32 @@
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
     </head>
     <body>
+        <main>
+            <div id="user-container" class="user-container">
+                <!-- Hier kommen die User per JS rein -->
+            </div>
 
-        <div id="user-container" class="user-container">
-            <!-- Hier kommen die User per JS rein -->
-        </div>
-
-        <span id="i"></span>
-        <input id="input" type="text" name="input" value="username" />
-        <button id="btn">button</button>
-        <button id="click" class="clickbtn">button</button>
+            <div id="i"></div>
+            <div>
+                <input id="input" type="text" name="input" value="username" />
+                <button id="btn">button</button>
+            </div>
+            <div class="clickbtn-container">
+                <button id="click" class="clickbtn">Click</button>
+            </div>
+        </main>
         <script>
             ////// VARIABLEN /////
             var socket = io();
             var myUsername = "";
             var myId = -1;
+            var timer; // scorebouncing
+            var TIMEOUT = 200; // ms
 
             ////// CONTROLLER /////
-
             // Anmeldung
             $("#btn").click(function() {
                  var input = $("#input").val();
@@ -36,8 +43,10 @@
 
             // Buttonaktionen
             $("#click").mousedown(function() {
+                $("#click").addClass("down");
+                $("#click").text(myUsername);
                 $("#i").text("down ");
-                socket.emit("down", myId);
+                socket.emit("down", myUsername);
                 $("#click").mouseleave(function() {
                     $("#i").text("up ");
                     $("#click").off("mouseleave");
@@ -46,12 +55,12 @@
             });
 
             $("#click").mouseup(function() {
+                $("#click").off("mouseleave");
                 $("#i").text("up ");
                 socket.emit("up", myId);
             });
             
             ////// SOCKET.IO LISTENER //////
-            
 
             // Beim connecten schonmal die User im Raum laden
             socket.on("build", function(msg) {
@@ -81,11 +90,22 @@
             });
 
             // Buttonverhalten
-            socket.on("down", function(msg) {
+            socket.on("down", function(username) {
+                $("#click").text(username);
                 $("#click").addClass("down");
             });
 
-            socket.on("up", function(msg) {
+            // Update score
+            socket.on("up", function(userScore) {
+                // msg enthält {id, score}
+                var $score = $("#user-" + userScore.id + " .score");
+                $score.velocity("stop");
+                var seq = [
+                    {e: $score, p: {scale: 1.5}, o: {duration: 50}},
+                    {e: $score, p: {scale: 1.0}, o: {duration: 50, delay: 25}}
+                ]
+                $.Velocity.RunSequence(seq);
+                $score.text(userScore.score);
                 $("#click").removeClass("down");
             });
 

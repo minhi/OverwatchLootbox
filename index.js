@@ -10,6 +10,11 @@ var PORT = 5000;
 
 // Array aus Usern: {username, id, socketid}
 var users = [];
+// HashMap aus userId->score
+// Wir speichern den score nicht in users, wegen Array
+// (was passiert, wenn score aktualisiert wird, während ein user disconnected?)
+var userScore = {};
+// Invariante: Die userId, die der nächste User erhalten wird
 var userId = 0;
 
 var client = new net.Socket();
@@ -49,10 +54,11 @@ io.on("connection", function(socket) {
 			id: userId,
 			socketid: socket.id
 		};
-		++userId;
 		users.push(newUser);
+		userScore[userId] = 0;
 		socket.broadcast.emit("add", newUser);
 		socket.emit("bind", newUser); // Einzeln zum Urpsrung senden, damit er die ID speichern kann
+		++userId;
 	});
 
 	// Ein User ist nicht mehr verbunden
@@ -65,13 +71,16 @@ io.on("connection", function(socket) {
 		console.log("a user " + socket.id + " disconnected.");
 	});
 
+	// Buttonverhalten zwischen allen Usern synchronisieren
 	socket.on("down", function(){
-		console.log("down");
-		io.emit("down");
+		socket.broadcast.emit("down");
 	});
 
-	socket.on("up", function(){
-		io.emit("up");
+	socket.on("up", function(id){
+		var score = userScore[id];
+		++score;
+		userScore[id] = score;
+		io.emit("up", {id: id, score: score});
 	});
 
 	// HILFSFUNKTIONEN

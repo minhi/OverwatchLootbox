@@ -77,6 +77,8 @@ io.on("connection", function(socket) {
 	});
 
 	socket.on("up", function(id){
+		// THE WHOLE FUCKING PURPOSE OF THIS PROGRAM
+		client.write('c');
 		var score = userScore[id];
 		++score;
 		userScore[id] = score;

@@ -15,18 +15,26 @@ $(document).ready(function(){
     });
 
     function setUsername() {
+        var regex = /^\w+$/i; // Alphanumerisch only
         var input = $("#input").val();
-        var username = cleanInput(input);
-        socket.emit("add", username);
-        
-        var seq = [
-            {e: $("#login"), p: "fadeOut"},
-            {e: $("#room"), p: "fadeIn", o: {display: "flex"}}
-        ]
-        $.Velocity.RunSequence(seq);
-        // $("#login").velocity("fadeOut");
-        //$("#room").velocity("fadeIn", {display: "flex"});
+        var username = cleanInput(input.trim());
 
+        if(username) {
+            if (regex.test(username)) {
+                 $(window).off("keydown");
+                socket.emit("add", username);
+                
+                var seq = [
+                    {e: $("#login"), p: "fadeOut"},
+                    {e: $("#room"), p: "fadeIn", o: {display: "flex"}}
+                ]
+                $.Velocity.RunSequence(seq);
+            } else {
+                $("#login-error").text("Der Benutzername darf nur alphanumerische Zeichen enthalten!");
+            }
+        } else {
+            $("#login-error").text("Du musst einen Benutzernamen angeben!");
+        }
     }
 
     // Buttonaktionen
@@ -133,5 +141,5 @@ $(document).ready(function(){
             $("#user-" + id).remove();
         }});
     }
-    
+
 });

@@ -27,7 +27,7 @@ $(document).ready(function(){
                 var seq = [
                     {e: $("#login"), p: "fadeOut"},
                     {e: $("#room"), p: "fadeIn", o: {display: "flex"}}
-                ]
+                ];
                 $.Velocity.RunSequence(seq);
             } else {
                 $("#login-error").text("Der Benutzername darf nur alphanumerische Zeichen enthalten!");
@@ -98,7 +98,7 @@ $(document).ready(function(){
         var seq = [
             {e: $score, p: {scale: 1.5}, o: {duration: 50}},
             {e: $score, p: {scale: 1.0}, o: {duration: 50, delay: 25}}
-        ]
+        ];
         $.Velocity.RunSequence(seq);
         $score.text(userScore.score);
         $("#click").removeClass("down");

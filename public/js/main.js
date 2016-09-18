@@ -102,7 +102,7 @@ $(document).ready(function(){
         $.Velocity.RunSequence(seq);
         $score.text(userScore.score);
         $("#click").removeClass("down");
-    })
+    });
 
     ////// HILFSFUNKTIONEN //////
 

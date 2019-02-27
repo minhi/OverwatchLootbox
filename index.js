@@ -27,15 +27,11 @@ client.connect(PORT, HOST, function() {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", function(request, response) {
-	/*client.write('c');
-	response.writeHead(200);
-	response.write("minh");
-	response.end();*/
 	response.sendFile(__dirname + "/index.html");
 });
 
-http.listen(13439, "0.0.0.0", function() {
-	console.log("listening on *:13439");
+http.listen(4500, "0.0.0.0", function() {
+	console.log("listening on *:4500");
 });
 
 // SOCKET
@@ -77,7 +73,7 @@ io.on("connection", function(socket) {
 	});
 
 	socket.on("up", function(id){
-		// THE WHOLE FUCKING PURPOSE OF THIS PROGRAM
+		// Sendet ein ein Paket zum Client für weitere Bearbeitung
 		client.write('c');
 		var score = userScore[id];
 		++score;

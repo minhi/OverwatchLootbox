@@ -7,3 +7,5 @@ Mit Freunden macht alles mehr spaß. Im Onlinespiel Overwatch kann ein Spieler v
 Dies war ein persönliches Mini-Projekt, um mit Node.js, WebSockets und moderne Web-UX (Animationen) zu experimentieren.
 
 ![img](img.png)
+
+![img](demo.webm)
